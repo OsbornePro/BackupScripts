@@ -137,13 +137,13 @@ Function Backup-GroupPolicy {
         {
 
             Write-Verbose "Copying $Path to $Destination"
-            Copy-Item -Path $Path\$Date -Destination $Destination -Recurse -Force
+            Copy-Item -Path "$Path\$Date" -Destination $Destination -Recurse -Force
 
         } # End Try
         Catch
         {
 
-            Write-Error "There was an error copying $Path to $Destination."
+            Write-Error "There was an error copying $Path\$Date to $Destination."
             $Error[0]
         
         } #End Catch

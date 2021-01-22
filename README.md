@@ -24,3 +24,9 @@ This is used to backup the devices added to a users Windows Admin Center. Device
 ```powershell
 Backup-WindowsAdminCenterDB -Uri "https://wac.domain.com:6516" -Path "C:\WAC-Backups"
 ```
+### LinuxAppBackup.sh
+This script can be used on Linux devices to backup important files or configurations you would like saved.
+Below is a root user crontab entry example to run the script on the 15th of every month. It is a good idea to set the file permissons on the script too chmod 600 for the root user
+```bash
+59 11 15 * * /bin/bash /root/scripts/LinuxAppBackup.sh
+```

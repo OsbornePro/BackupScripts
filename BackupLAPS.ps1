@@ -8,7 +8,7 @@
 $FileName = (Get-Date).Ticks
 $FilePath = 'C:\DB\' + $FileName + '.csv'
 
-New-Item -Path $FilePath -ItemType File -Value "ComputerName,AdmPwd" -ErrorAction SilentlyContinue | Out-Null
+New-Item -Path $FilePath -ItemType File -Value "ComputerName,AdmPwd"
 
 $Computers = Get-ADComputer -Filter 'Enabled -eq "True"' -Properties "ms-Mcs-AdmPwd"
 

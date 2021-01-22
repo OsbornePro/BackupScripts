@@ -16,7 +16,7 @@ This is used to securely backup and keep a password history of Local Administrat
 ### Backup-GroupPolicy
 This is used to backup group policy locally and too a network location. A GUID reference file is also created so you know the name of the GPO associated with the GUID
 ```powershell
-Backup-GroupPolicy -Path "C:\GPOBackups" -Destination -Destination "\\networkshare\files$\GPOBackups"
+Backup-GroupPolicy -Path "C:\GPOBackups" -Destination "\\networkshare\files$\GPOBackups"
 ```
 
 ### Backup-WindowsAdminCenterDB

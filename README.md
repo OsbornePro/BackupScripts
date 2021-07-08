@@ -30,3 +30,15 @@ Below is a root user crontab entry example to run the script on the 15th of ever
 ```bash
 59 11 15 * * /bin/bash /root/scripts/LinuxAppBackup.sh
 ```
+
+### Update-Nimble.ps1
+This script can be used to run as a task every so often that checks for and installs any new Nimble Updates. This script requires some modification. It requires the HPENimbleToolKit PowerShell module to use the created cmdlets and authenticates to the Nimble appliance. I suggest using [this script](https://github.com/tobor88/PowerShell/blob/master/Hide-PowerShellScriptPassword.ps1) to hide your passwords in the script and using [this script](https://github.com/tobor88/BTPS-SecPack/blob/master/Hardening%20Cmdlets/Set-SecureFilePermissions.ps1) to prevent any unwanted modifications to the file.
+```powershell
+.\Update-Nimble.ps1
+```
+
+### Update-Unitrends.ps1
+This script can be used to run as a task every so often that checks for and installs and new Unitrends appliance updates. This script requires some modification. It sends emails using authentication and authenticates to the Unitrends appliance. I suggest using [this script](https://github.com/tobor88/PowerShell/blob/master/Hide-PowerShellScriptPassword.ps1) to hide your passwords in the script and using [this script](https://github.com/tobor88/BTPS-SecPack/blob/master/Hardening%20Cmdlets/Set-SecureFilePermissions.ps1) to prevent any unwanted modifications to the file.
+```powershell
+.\Update-Unitrends.ps1
+```

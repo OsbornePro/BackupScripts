@@ -19,12 +19,12 @@ ForEach ($C in $Computers)
     $msMcsAdmPwd = $C.'ms-Mcs-AdmPwd'
     If ($Null -ne $msMcsAdmPwd)
     {
-    
+
         $Name = $C.Name
         $OutString = $Name + ',' + $msMcsAdmPwd
-        
+
         $OutString | Out-File -FilePath $FilePath -Append
-        
+
     }  # End If
 
 }  # End ForEach
@@ -35,7 +35,7 @@ $Acl = Get-Acl -Path $FilePath
 $Acl.SetAccessRuleProtection($True, $False)
 
 $PermittedUsers = @('NT AUTHORITY\SYSTEM', 'BUILTIN\Administrators')
-ForEach ($User in $PermittedUsers) 
+ForEach ($User in $PermittedUsers)
 {
 
     $Permission = $User, 'FullControl', 'Allow'
@@ -50,8 +50,8 @@ $Acl | Set-Acl -Path $FilePath
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUAWpXYCBRT9Czlffmk9yY+irE
-# Mxegggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUxeF8yHhc1pJiZLjLb7t1MMUr
+# pyWgggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -111,11 +111,11 @@ $Acl | Set-Acl -Path $FilePath
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FLaVfHY5/6lBYsnoRPNls2cfMrkmMA0GCSqGSIb3DQEBAQUABIIBAKt9qms0HpJ1
-# faVaJzzoW2gzG9syHThQnWocR2NVg1hn4cdRmSn/ACkKB7Mxyldai/GNnJTMCcr3
-# EOHrwUlwHSklnzYunNdcOUk/bom+9kqUUO2n8nO71qAQzQsLiteLVDADZ96xYkbR
-# 0glc7hGN+B48pwefqyl8C+qcHJq0R6sbIflSlRupCWa3VJ/y/csT76MPS3MqLhx2
-# rkPLzMUDTGEwODHlAp44FtV4jYFfhe8xv/fP/6FNu2gvV4nap3OgsQEW2TqkRhRu
-# 6qwxZ3vfz+eSgIPqCQq1pXINQqVjCY6jhc1UA8CRxYLI864Bx54MRSdXoorfr8w0
-# 56UQksx2zI0=
+# FEAnMC9d7QCqf75TPTngblSKoeNPMA0GCSqGSIb3DQEBAQUABIIBALd0BHfeFqxu
+# KAbODOb/I8djqBXoBvKoD4NEax8x317HBeMN1OANsFsVrtzA7/E+g2/bu9e7NmCG
+# 4fBeigWuRyqPi+ElFBGxnDD1ClrSwKyMo0uaRQ98dXodtSuGfcek5YRqzkJZsrj0
+# Mcbmgi1JvDEHREVVe/L0lcmPJ+9RSHxF0kWYEUsaudRD4geUn0bRk1JcPWPMkpPw
+# G4gk7q+zsyb2jAK7zudr4TQdXWJhQT4DirG7Tl1bBoQhtoUVJqLRj009b4EY5adk
+# JdXjpJzdrLeTqRSY9+9BY5w7sGtcIjhmp08xdD8Hkvuv4hO6xV2OhwHBukLtSTxs
+# n6Mu+DxP/7k=
 # SIG # End signature block

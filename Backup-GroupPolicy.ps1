@@ -26,14 +26,14 @@ Contact: rosborne@osbornepro.com
 
 
 .LINK
-https://roberthsoborne.com
 https://osbornepro.com
+https://writeups.osbornepro.com
 https://btps-secpack.com
 https://github.com/tobor88
 https://gitlab.com/tobor88
 https://www.powershellgallery.com/profiles/tobor
 https://www.linkedin.com/in/roberthosborne/
-https://www.youracclaim.com/users/roberthosborne/badges
+https://www.credly.com/users/roberthosborne/badges
 https://www.hackthebox.eu/profile/52286
 
 #>
@@ -51,12 +51,12 @@ Function Backup-GroupPolicy {
                 ValueFromPipeline=$True,
                 ValueFromPipelineByPropertyName=$True)]
             [System.IO.FileInfo]$Destination
-            
+
         ) # End param
 
     BEGIN
     {
-    
+
         Import-Module -Name GroupPolicy
 
         $Date = Get-Date -Format M.d.yyyy
@@ -76,9 +76,9 @@ Function Backup-GroupPolicy {
 
         } # End Else
 
-        Try 
+        Try
         {
-            
+
             Write-Verbose "Mapping network drive location as defined by the -Destination parameter..."
             New-PsDrive -Name 'G' -PSProvider 'FileSystem' -Root $Destination -Description 'Temp drive mapping for backing up GPOs.' -Scope 'Global' -Persist
 
@@ -91,11 +91,11 @@ Function Backup-GroupPolicy {
 
         } # End Catch
 
-    } #End BEGIN 
+    } #End BEGIN
 
     PROCESS
     {
-        Try 
+        Try
         {
 
             Write-Verbose "IN PROGRESS: Backing up GPO's to $Path\$Date..."
@@ -105,15 +105,15 @@ Function Backup-GroupPolicy {
         Catch
         {
 
-            $Error[0]    
+            $Error[0]
             Throw "Failed to backup GPO's to $Path\$Date"
 
         } # End Catch
 
-        Try 
+        Try
         {
 
-            Write-Verbose "Creating GUID reference for the backed up Group Policies at $Path\$Date\GUIDReference.csv" 
+            Write-Verbose "Creating GUID reference for the backed up Group Policies at $Path\$Date\GUIDReference.csv"
             Get-GPO -All | Select-Object -Property 'DisplayName','GpoId' | Out-File "$Path\$Date\GUIDReference.csv"
 
             Write-Verbose "Adding GUID Folder descriptions to $Path\$Date\GUIDFolderDescription.csv"
@@ -130,7 +130,7 @@ Function Backup-GroupPolicy {
 
     } # End PROCESS
 
-    END 
+    END
     {
 
         Try
@@ -145,9 +145,9 @@ Function Backup-GroupPolicy {
 
             Write-Error "There was an error copying $Path\$Date to $Destination."
             $Error[0]
-        
+
         } #End Catch
-        
+
         Try
         {
 
@@ -170,8 +170,8 @@ Function Backup-GroupPolicy {
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUSlo044ReOmTI7f0Apjjasg3A
-# ru+gggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzXV8/B2mwgHZuJAVXO2Lq4gx
+# hmKgggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -231,11 +231,11 @@ Function Backup-GroupPolicy {
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FK2JyX4lFhUbiLnJZ8T3q4UKfLoZMA0GCSqGSIb3DQEBAQUABIIBAE1Z69sz1L8v
-# cwThmyqHfP3nQ5Cm/onvyqEd+9xpPyzaNzTYNpy7ADiNh1yJCi/0PV1iPGqpb8Dv
-# IROeSwE42u9VHa83PcQuBPqP7VLcc2KuoLOAITp/klQraXXyL0zpoDq807D7+MqS
-# hBrAJsTZk5AlpzeRukijqy49FQgkUXqPvsRtXhaTHng5OoOKM7Hcs7Rb+krX2Cgz
-# 3ClODU1ku5zhMoM9DrnKJbwldIF+Vjq8mHdYeF+OUGW0Jb3nxfrLPiR8lAQh2qx6
-# 7pp4mSv0GcUPzv++WqpOw3cChgUfC6M2JCN4IN58z9s//FXyd9jQGxk++qlAB0S/
-# hVgBLpci2Mg=
+# FOu4wqDvOwVz6ItNmhfvKLVBlN0GMA0GCSqGSIb3DQEBAQUABIIBAECuozUCXIua
+# 8XcAgyzK9b/SLJ37tehTdVmaPLa20SgrmlG9n5JSy05KwMw77gwzxiziX2iDK+Ue
+# dXSyA/MFfXsQsLzQ9ysi94aYXP8mJJ3+nB22BePYJ7YzaL6Iqf8WQjUC8LYhQq0k
+# OskmZchX3v50Rvy7HSVNnCQquoRUOndYcB3h89BfiR2hSBzTBXjDzSLibUvQ+Rtb
+# b2TE5rUzoUlyWy0PPUHzNXwLte1Isg2sVTEMJj1xanfwFm/ZOC+8QGuJV2JvtaBY
+# PCYxfYp8zwHUdNlfIvb//w8wB+eQBs/HFmOPEvl6+DXeaV1Cvb2scaYBX0TcmSCi
+# MwyDA1soHfg=
 # SIG # End signature block

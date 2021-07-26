@@ -22,18 +22,18 @@ Contact: rosborne@osbornepro.com
 
 
 .LINK
-https://roberthsoborne.com
+https://osbornepro.com
 https://writeups.osbornepro.com
 https://www.btps-secpack.com
 https://github.com/tobor88
 https://gitlab.com/tobor88
 https://www.powershellgallery.com/profiles/tobor
 https://www.linkedin.com/in/roberthosborne/
-https://www.youracclaim.com/users/roberthosborne/badges
+https://www.credly.com/users/roberthosborne/badges
 https://www.hackthebox.eu/profile/52286
 
 #>
-Function Backup-CA 
+Function Backup-CA
 {
     [CmdletBinding()]
         param(
@@ -58,9 +58,9 @@ Function Backup-CA
 
         certutil –catemplates > “T:\$Date\CaTemplates.txt”
 
-        Try 
+        Try
         {
-        
+
             Backup-CARoleService -Path "T:\$Date\CABackup" -KeepLog -Force
 
         } # End Try
@@ -85,8 +85,8 @@ Function Backup-CA
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUvmZ3500ai/GpmYbQtUqb7Jki
-# WPqgggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXjVO50/7wmFW6PHYtV8/JJNs
+# fi2gggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -146,11 +146,11 @@ Function Backup-CA
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FInyojM49XW2S2unTlJ6CuGDCyewMA0GCSqGSIb3DQEBAQUABIIBAJbWxD3p3hRy
-# 3l1LTm6QvSpVSHeEoHEA5OvUFyf3Y5Qcrossr5wKD112SRnJruOGjaonabsT2f3H
-# jstth3neTNnYRxGf4QuH53nA3SS5XTCV+cMbtMmPaczrEQxjRtfIZxLqH8JrSe/d
-# V+cbm9grdekpwDbFW4PKXl3RHUd7OTkv2Lhg8FMNvFXx9677Up6hMHZ7iYU29WoQ
-# VWIjVDLtOEMha8fJCxLngto2Ybe7huUnFzAKGaZ4PSEKi2jGlh2jdFW0xlexXKlu
-# d8RC+xcJs6FpwcOLfSel8qpv3JhjGtb7JYd8D5P+pFUit2z+8c118daqPg5XmfIf
-# /Izys/sNnhs=
+# FJ1rcO//t4VKbClue7zzXnm8bxK5MA0GCSqGSIb3DQEBAQUABIIBACsEbbtB1Q/r
+# 3KB+Dgwly28i9GZnccY2E2dhK5zpYTK8y1z2tTuozpt0VDAqBebfax3AZlN/t3Gc
+# gYTGtn1gWa0ieaAGCN5k+YYEzndB+AskjehVDaWz1WarRMGTYFw1Oq3SYEUdjQog
+# sJ52n7iu1kYhNtFFpuYRI5e+1pn93FoNy16UBSw0V5mnFMpO0M3CDzxqat3sAVg5
+# BVUhe6NdeaibCsUqMxCDml3JaWO49gFSuwzAVV0QWpdptDkY33RaqjNxth5p7FuX
+# e2G4LXNJFX0AQPm2bMWh7WlZjJxiAkyPn1eMwEWdSTAy/TOatAtzfbn8Oxe/WfJO
+# aKxwyyQwqfo=
 # SIG # End signature block

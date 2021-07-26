@@ -18,15 +18,15 @@ This paramaeter is used to define the file name and location to save the db info
 Backup-WindowsAdminCenterDB -Uri "https://wac.domain.com:6516" -Path "C:\WAC-Backups"
 # This example backups up the contents of the Windows Admine Center device database at wac.domain.com on port 6516 to C:\WAC-Backups\2021.01.22.csv
 
-    
+
 .INPUTS
 None
-    
-    
+
+
 .OUTPUTS
 None
-    
-    
+
+
 .NOTES
 Author: Robert H. Osborne
 Alias: tobor
@@ -34,14 +34,14 @@ Contact: rosborne@osbornepro.com
 
 
 .LINK
-https://roberthsoborne.com
+https://osbornepro.com
 https://writeups.osbornepro.com
 https://www.btps-secpack.com
 https://github.com/tobor88
 https://gitlab.com/tobor88
 https://www.powershellgallery.com/profiles/tobor
 https://www.linkedin.com/in/roberthosborne/
-https://www.youracclaim.com/users/roberthosborne/badges
+https://www.credly.com/users/roberthosborne/badges
 https://www.hackthebox.eu/profile/52286
 
 #>
@@ -54,7 +54,7 @@ Function Backup-WindowsAdminCenterDB {
                 ValueFromPipeline=$False,
                 HelpMessage="`n[H] Define the URL to the Windows Admin Center web application`n[E] EXAMPLE: https://wac.domain.com:6516")]  # End Parameter
             [String]$Uri,
-            
+
             [Parameter(
                 Mandatory=$True,
                 Position=1,
@@ -65,10 +65,10 @@ Function Backup-WindowsAdminCenterDB {
 
     $Date = Get-Date -Format yyyy.MM.dd
     $FilePath = $Path + "\" + $Date + ".csv"
-    
+
     If (Test-Path -Path "$env:ProgramFiles\windows admin center\PowerShell\Modules\ConnectionTools")
     {
-    
+
         Import-Module "$env:ProgramFiles\windows admin center\PowerShell\Modules\ConnectionTools"
 
     }  # End If
@@ -113,8 +113,8 @@ Function Backup-WindowsAdminCenterDB {
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUkDLtqiYFf6X8hWh/tgClB7Xd
-# QBegggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUKe6a8D5CWjxDFQrUwx9Ms85b
+# 29igggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -174,11 +174,11 @@ Function Backup-WindowsAdminCenterDB {
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FOuXxj5gVBvOREadhhDjGRi9wU2MMA0GCSqGSIb3DQEBAQUABIIBAJKgZD7uXXD3
-# kqhetruc6hQKgI72SOpR0aVT4KMOuwr+IBntZBDnZmTzDyR79Fs9GwcFIxWPeHiq
-# 6KdWgAwGXXM7BBHjHhL6J6OPiMrWTY5awI/2rC4YBCvLlyr+iV55O1zNgeh/oztG
-# ErZ2klxST+gRZmd18a2Nx0onlep0M39wSCd7EhY4hWzKQTtB2uFJYvLentiKSWL6
-# o0wl8nSd88w+Phm/Vz7OOlc81qx5ctohqVgQuMt2b2cYG1LOJ+x+rgRjosw3CQjA
-# QfW8GPjKfnC0bl7aPLlEnPIdKZZyeka24Qmr4eWVLPRBNKahefJaphArY35qbQ/Y
-# 9VAA6A7R1SY=
+# FDRgHKsy/B0JEa8TZ7BinN3bPgYYMA0GCSqGSIb3DQEBAQUABIIBAAPyfMXJ/BbC
+# NmRe1Fbr4lJmamyFaAmpy8OU9UUsUUcX34TvbXpWDr1UOfSn8WMRlEc/Huo+xJCR
+# 0hyvENLt6qNKiP0YMFbanXuUhUawNIM+Eu36Bx+y2qAfxzoEASLTzVPc2N5rwZpR
+# iNHi7MlWmlOMny56Xa1PNEGaSuEsXuxF/Bzpdw1W3kNtQbWDL5k/T7RyqU/lQM9C
+# 4RlGL2T4Uq4Yz7LB6xuJ0irJO8wkZRQWPYvk3bW0RhznxrXU1rFt08ZSz7YFyT7c
+# xEL8m7OkTQT+kU1PgjEGOUnWkuQoHIimYlJy6WZMSOnrysjEugCmxI5Cj5soegVr
+# jLFL52KhdHI=
 # SIG # End signature block

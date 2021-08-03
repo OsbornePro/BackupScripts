@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Date>2021-08-03T12:59:51.9045548</Date>
+    <Author>OSBORNEPRO\radmin</Author>
+    <Description>Runs a backup of LAPS passwords</Description>
+    <URI>\Backup LAPS</URI>
+  </RegistrationInfo>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2021-08-03T05:00:00</StartBoundary>
+      <Enabled>true</Enabled>
+      <ScheduleByMonth>
+        <DaysOfMonth>
+          <Day>Last</Day>
+        </DaysOfMonth>
+        <Months>
+          <January />
+          <February />
+          <March />
+          <April />
+          <May />
+          <June />
+          <July />
+          <August />
+          <September />
+          <October />
+          <November />
+          <December />
+        </Months>
+      </ScheduleByMonth>
+    </CalendarTrigger>
+  </Triggers>
+  <Principals>
+    <Principal id="Author">
+      <UserId>S-1-5-18</UserId>
+      <RunLevel>HighestAvailable</RunLevel>
+    </Principal>
+  </Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>true</AllowHardTerminate>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+    <IdleSettings>
+      <StopOnIdleEnd>true</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <AllowStartOnDemand>true</AllowStartOnDemand>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <WakeToRun>true</WakeToRun>
+    <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>
+    <Priority>7</Priority>
+    <RestartOnFailure>
+      <Interval>PT1M</Interval>
+      <Count>3</Count>
+    </RestartOnFailure>
+  </Settings>
+  <Actions Context="Author">
+    <Exec>
+      <Command>powershell</Command>
+      <Arguments>-NonInteractive -NoLogo -WindowStyle Hidden .\BackupLAPS.ps1</Arguments>
+      <WorkingDirectory>C:\Users\Public\Documents</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>

@@ -10,25 +10,9 @@
     <CalendarTrigger>
       <StartBoundary>2021-08-03T05:00:00</StartBoundary>
       <Enabled>true</Enabled>
-      <ScheduleByMonth>
-        <DaysOfMonth>
-          <Day>Last</Day>
-        </DaysOfMonth>
-        <Months>
-          <January />
-          <February />
-          <March />
-          <April />
-          <May />
-          <June />
-          <July />
-          <August />
-          <September />
-          <October />
-          <November />
-          <December />
-        </Months>
-      </ScheduleByMonth>
+      <ScheduleByDay>
+        <DaysInterval>30</DaysInterval>
+      </ScheduleByDay>
     </CalendarTrigger>
   </Triggers>
   <Principals>

@@ -9,16 +9,13 @@ $FileName = (Get-Date).Ticks
 $FilePath = 'C:\DB\' + $FileName + '.csv'
 
 New-Item -Path $FilePath -ItemType File -Value "ComputerName,AdmPwd"
-
 $Computers = Get-ADComputer -Filter 'Enabled -eq "True"' -Properties "ms-Mcs-AdmPwd"
 
 Write-Output "[*] Updating computer and LAPS info"
-ForEach ($C in $Computers)
-{
+ForEach ($C in $Computers) {
 
     $msMcsAdmPwd = $C.'ms-Mcs-AdmPwd'
-    If ($Null -ne $msMcsAdmPwd)
-    {
+    If ($Null -ne $msMcsAdmPwd) {
 
         $Name = $C.Name
         $OutString = $Name + ',' + $msMcsAdmPwd
@@ -35,8 +32,7 @@ $Acl = Get-Acl -Path $FilePath
 $Acl.SetAccessRuleProtection($True, $False)
 
 $PermittedUsers = @('NT AUTHORITY\SYSTEM', 'BUILTIN\Administrators')
-ForEach ($User in $PermittedUsers)
-{
+ForEach ($User in $PermittedUsers) {
 
     $Permission = $User, 'FullControl', 'Allow'
     $AccessRule = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $Permission
@@ -50,8 +46,8 @@ $Acl | Set-Acl -Path $FilePath
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUxeF8yHhc1pJiZLjLb7t1MMUr
-# pyWgggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU2tVDwDyf29mtKvpQYBiAIeAL
+# +0ugggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -111,11 +107,11 @@ $Acl | Set-Acl -Path $FilePath
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FEAnMC9d7QCqf75TPTngblSKoeNPMA0GCSqGSIb3DQEBAQUABIIBALd0BHfeFqxu
-# KAbODOb/I8djqBXoBvKoD4NEax8x317HBeMN1OANsFsVrtzA7/E+g2/bu9e7NmCG
-# 4fBeigWuRyqPi+ElFBGxnDD1ClrSwKyMo0uaRQ98dXodtSuGfcek5YRqzkJZsrj0
-# Mcbmgi1JvDEHREVVe/L0lcmPJ+9RSHxF0kWYEUsaudRD4geUn0bRk1JcPWPMkpPw
-# G4gk7q+zsyb2jAK7zudr4TQdXWJhQT4DirG7Tl1bBoQhtoUVJqLRj009b4EY5adk
-# JdXjpJzdrLeTqRSY9+9BY5w7sGtcIjhmp08xdD8Hkvuv4hO6xV2OhwHBukLtSTxs
-# n6Mu+DxP/7k=
+# FCTa2KNYqA5/VTDsAPWSTKSZn7MLMA0GCSqGSIb3DQEBAQUABIIBAGHPYA9gsSud
+# 5+Pr7sC5cb+G1qxKj29CDgB+V0TA8n6uIOKPtTcllymckGemS76nD2yYoxDjUioD
+# 24RbY0dgdhhIfJBw5v+TPhzP9OnDgVtkaCiIfFS1hiXdAgGnp9esSIatfU0TCm5+
+# f71Tn5FU8eSOdAFNbSOZJhcNpr6gKuqvDE7tTJ45nDPGd9zMFvVRdHjiZKp9mhw5
+# b43lPrWUZ+NArd8GI3J54eQTJY3ZwbkyouBq3HTBu5lsI+lQq2nnijUeLB646sK9
+# VkUh19s3wydhF77C3esDziRdciSyBiAM2h3UQtOF8keFA6AfzKyLZfZ8f4xQIPCQ
+# 9f+DzpuCjAE=
 # SIG # End signature block

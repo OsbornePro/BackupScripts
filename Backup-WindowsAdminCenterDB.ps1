@@ -36,7 +36,7 @@ Contact: rosborne@osbornepro.com
 .LINK
 https://osbornepro.com
 https://writeups.osbornepro.com
-https://www.btps-secpack.com
+https://btpssecpack.osbornepro.com
 https://github.com/tobor88
 https://gitlab.com/tobor88
 https://www.powershellgallery.com/profiles/tobor
@@ -66,43 +66,37 @@ Function Backup-WindowsAdminCenterDB {
     $Date = Get-Date -Format yyyy.MM.dd
     $FilePath = $Path + "\" + $Date + ".csv"
 
-    If (Test-Path -Path "$env:ProgramFiles\windows admin center\PowerShell\Modules\ConnectionTools")
-    {
+    If (Test-Path -Path "$env:ProgramFiles\windows admin center\PowerShell\Modules\ConnectionTools") {
 
         Import-Module "$env:ProgramFiles\windows admin center\PowerShell\Modules\ConnectionTools"
 
     }  # End If
-    Else
-    {
+    Else {
 
         Throw "[x] $env:ProgramFiles\windows admin center\PowerShell\Modules\ConnectionTools does not exist"
 
     }  # End Else
 
 
-    If (Test-Path -Path $FilePath)
-    {
+    If (Test-Path -Path $FilePath) {
 
         Write-Output "[*] $FilePath already exists. Creating new file $FilePath"
         Export-Connection $Uri -FileName $FilePath
 
     }  # End If
-    Else
-    {
+    Else {
 
         Write-Output "[*] Creating file $FilePath"
         Export-Connection $Uri -FileName $FilePath
 
     }  # End Else
 
-    If (Test-Path -Path $FilePath)
-    {
+    If (Test-Path -Path $FilePath) {
 
         Write-Output "[*] Backup file successfully created"
 
     }  # End If
-    Else
-    {
+    Else {
 
         Write-Warning "[x] FAILURE: Backup file was not created"
 
@@ -113,8 +107,8 @@ Function Backup-WindowsAdminCenterDB {
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUKe6a8D5CWjxDFQrUwx9Ms85b
-# 29igggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUoqX6XJsD8oYf70ZrasjpsbBA
+# 9zSgggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -174,11 +168,11 @@ Function Backup-WindowsAdminCenterDB {
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FDRgHKsy/B0JEa8TZ7BinN3bPgYYMA0GCSqGSIb3DQEBAQUABIIBAAPyfMXJ/BbC
-# NmRe1Fbr4lJmamyFaAmpy8OU9UUsUUcX34TvbXpWDr1UOfSn8WMRlEc/Huo+xJCR
-# 0hyvENLt6qNKiP0YMFbanXuUhUawNIM+Eu36Bx+y2qAfxzoEASLTzVPc2N5rwZpR
-# iNHi7MlWmlOMny56Xa1PNEGaSuEsXuxF/Bzpdw1W3kNtQbWDL5k/T7RyqU/lQM9C
-# 4RlGL2T4Uq4Yz7LB6xuJ0irJO8wkZRQWPYvk3bW0RhznxrXU1rFt08ZSz7YFyT7c
-# xEL8m7OkTQT+kU1PgjEGOUnWkuQoHIimYlJy6WZMSOnrysjEugCmxI5Cj5soegVr
-# jLFL52KhdHI=
+# FHA7z9KNDNZIeDv/NSbwREovqWiSMA0GCSqGSIb3DQEBAQUABIIBABRfs4xN3RFc
+# cY9rLBaBViV6CPXtNCoEuUk8yFdoB1h1Tr/qCiVq3w6+osher5llecKrh1PIDK1+
+# vfrrft/f6O1GnmI1pGQElN0TJ3ueNEzAn7jbgZ+6yHv2qJ4heCZY0imFx/lHGa1I
+# M6YNC0XDkLpLuTK0v53Kpm3hYOhX6fhBGAXaUYdOn+TOcvvupNPdgXJEmW0fpKUF
+# RyB1U85CdBPRFKdKL0qFFJKZWfCrnboTQejeha4S78yeUBZYbp+uSHQFvVu9VJs8
+# MOh7vfj8cpfj9HXUHXK4Q99+O2dER2KFCa/Uxapntm01z9oOQqgKxpSKKxxyj2MX
+# DTwx/5IkhmQ=
 # SIG # End signature block

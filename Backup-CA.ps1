@@ -24,7 +24,7 @@ Contact: rosborne@osbornepro.com
 .LINK
 https://osbornepro.com
 https://writeups.osbornepro.com
-https://www.btps-secpack.com
+https://btpssecpack.osbornepro.com
 https://github.com/tobor88
 https://gitlab.com/tobor88
 https://www.powershellgallery.com/profiles/tobor
@@ -33,8 +33,7 @@ https://www.credly.com/users/roberthosborne/badges
 https://www.hackthebox.eu/profile/52286
 
 #>
-Function Backup-CA
-{
+Function Backup-CA {
     [CmdletBinding()]
         param(
             [Paraneter(
@@ -48,24 +47,20 @@ Function Backup-CA
     $Date = Get-Date -Format yyyy.MM.dd
     New-PSDrive -Name T -Root $Path -PSProvider FileSystem -Scope Global -Persist -ErrorAction SilentlyContinue
 
-    If (!(Test-Path -Path "T:\$Date"))
-    {
+    If (!(Test-Path -Path "T:\$Date")) {
 
         Write-Verbose "Creating folder $Date because it does not already exist."
         New-Item -Path "T:\" -Name $Date -ItemType Directory -Force
 
-        reg export HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration “T:\$Date\CAregsettings.reg”
+        reg export HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration "T:\$Date\CAregsettings.reg"
+        certutil –catemplates > "T:\$Date\CaTemplates.txt"
 
-        certutil –catemplates > “T:\$Date\CaTemplates.txt”
-
-        Try
-        {
+        Try {
 
             Backup-CARoleService -Path "T:\$Date\CABackup" -KeepLog -Force
 
         } # End Try
-        Catch
-        {
+        Catch {
 
             Write-Warning 'Could not backup the CA role service to network location. Backup occuring locally. Script will attempt the action with the password defined.'
             Backup-CARoleService -Path "T:\" -Password (ConvertTo-SecureString 'D0ntForgetT0SetYourPassw0rdHere!' -AsPlainText -Force) -KeepLog -Force
@@ -73,8 +68,7 @@ Function Backup-CA
         } # End Catch
 
     } # End If
-    Else
-    {
+    Else {
 
         Write-Verbose "Task has already been run and backups already been obtained."
 
@@ -85,8 +79,8 @@ Function Backup-CA
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXjVO50/7wmFW6PHYtV8/JJNs
-# fi2gggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUfeQruZry776ggasMt8Ev/2xI
+# 5eigggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -146,11 +140,11 @@ Function Backup-CA
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FJ1rcO//t4VKbClue7zzXnm8bxK5MA0GCSqGSIb3DQEBAQUABIIBACsEbbtB1Q/r
-# 3KB+Dgwly28i9GZnccY2E2dhK5zpYTK8y1z2tTuozpt0VDAqBebfax3AZlN/t3Gc
-# gYTGtn1gWa0ieaAGCN5k+YYEzndB+AskjehVDaWz1WarRMGTYFw1Oq3SYEUdjQog
-# sJ52n7iu1kYhNtFFpuYRI5e+1pn93FoNy16UBSw0V5mnFMpO0M3CDzxqat3sAVg5
-# BVUhe6NdeaibCsUqMxCDml3JaWO49gFSuwzAVV0QWpdptDkY33RaqjNxth5p7FuX
-# e2G4LXNJFX0AQPm2bMWh7WlZjJxiAkyPn1eMwEWdSTAy/TOatAtzfbn8Oxe/WfJO
-# aKxwyyQwqfo=
+# FJk1uoGeofh9SGgS5vCDI0vwmoh6MA0GCSqGSIb3DQEBAQUABIIBALDsSARoaAGH
+# AGusEdDd/Gu0HUIeSH5Ux9fWWAMEzBCcU6u+8hGgrmKQPabxu04QNy3Ph52sfHR2
+# JZ+oEYbK5g6yhhFhUzRx1AHNeSaweMmVVfoLuTb9NaG6qn2P2o0FDkmq9sozXA6n
+# sax/yA8b6Y81fPKzYAjK8Dp+rhLiGJTv19jdmAD1C0YfNG+lsR1t97VLgBb1MtcV
+# 7Q1Jj48yPdTwWrK1hLaRxgFgMpNbKwKfnz0h37rByZM6Q0fwVOK6zAwAPcNM6Wff
+# ZjvsFBmAY88JbF5VUBNUXv5GjG584q0kUUP781Un9XF2/0K+wbaWi5x6KiNjZxXi
+# 3l8ZdhD5LSI=
 # SIG # End signature block

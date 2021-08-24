@@ -28,7 +28,7 @@ Contact: rosborne@osbornepro.com
 .LINK
 https://osbornepro.com
 https://writeups.osbornepro.com
-https://btps-secpack.com
+https://btpssecpack.osbornepro.com
 https://github.com/tobor88
 https://gitlab.com/tobor88
 https://www.powershellgallery.com/profiles/tobor
@@ -54,64 +54,55 @@ Function Backup-GroupPolicy {
 
         ) # End param
 
-    BEGIN
-    {
+    BEGIN {
 
         Import-Module -Name GroupPolicy
 
         $Date = Get-Date -Format M.d.yyyy
         $Paths = $Path, $Destination
 
-        If ((Test-Path -Path $Paths) -eq $False)
-        {
+        If ((Test-Path -Path $Paths) -eq $False) {
 
             Write-Verbose 'Backup has not been run today. Making a folder using todays date...'
             New-Item -Path $Paths -ItemType 'Directory'
 
         } # End If
-        Else
-        {
+        Else {
 
             Throw 'Backup has already been run today.'
 
         } # End Else
 
-        Try
-        {
+        Try {
 
             Write-Verbose "Mapping network drive location as defined by the -Destination parameter..."
             New-PsDrive -Name 'G' -PSProvider 'FileSystem' -Root $Destination -Description 'Temp drive mapping for backing up GPOs.' -Scope 'Global' -Persist
 
         } # End Try
-        Catch
-        {
+        Catch {
 
             Write-Warning "Drive G is already mapped. Press Ctrl+C to cancel script execution or press enter to continue.`nIf you have the G drive mapped to a network share or drive already this wont work. Change the cmdlet as I am not error handling that you Nancy."
             Pause
 
         } # End Catch
 
-    } #End BEGIN
+    } # End BEGIN
 
-    PROCESS
-    {
-        Try
-        {
+    PROCESS {
+        Try {
 
             Write-Verbose "IN PROGRESS: Backing up GPO's to $Path\$Date..."
             Backup-Gpo -All -Path "$Path\$Date" | Out-Null
 
         } # End Try
-        Catch
-        {
+        Catch {
 
             $Error[0]
             Throw "Failed to backup GPO's to $Path\$Date"
 
         } # End Catch
 
-        Try
-        {
+        Try {
 
             Write-Verbose "Creating GUID reference for the backed up Group Policies at $Path\$Date\GUIDReference.csv"
             Get-GPO -All | Select-Object -Property 'DisplayName','GpoId' | Out-File "$Path\$Date\GUIDReference.csv"
@@ -120,8 +111,7 @@ Function Backup-GroupPolicy {
             Get-ChildItem "$Path\$Date" -Directory -Recurse -Force | Out-String | Out-File "$Path\$Date\GUIDFolderDescription.csv"
 
          }# End Try
-        Catch
-        {
+        Catch {
 
             Write-Error "There was an issue creating csv file containing GUID reference information."
             $Error[0]
@@ -130,33 +120,28 @@ Function Backup-GroupPolicy {
 
     } # End PROCESS
 
-    END
-    {
+    END {
 
-        Try
-        {
+        Try {
 
             Write-Verbose "Copying $Path to $Destination"
             Copy-Item -Path "$Path\$Date" -Destination $Destination -Recurse -Force
 
         } # End Try
-        Catch
-        {
+        Catch {
 
             Write-Error "There was an error copying $Path\$Date to $Destination."
             $Error[0]
 
         } #End Catch
 
-        Try
-        {
+        Try {
 
             Write-Verbose "Removing mapped destination drive...."
             Remove-PSDrive -Name 'G' -PSProvider 'FileSystem' -Scope 'Global' -Force
 
         } # End Try
-        Catch
-        {
+        Catch {
 
             Write-Error "There was an error removing the mapped PSDrive"
             $Error[0]
@@ -170,8 +155,8 @@ Function Backup-GroupPolicy {
 # SIG # Begin signature block
 # MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzXV8/B2mwgHZuJAVXO2Lq4gx
-# hmKgggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUSKMWjdv7OM8wtbCKBW05PnTk
+# fMmgggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
 # BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
 # BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
 # IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
@@ -231,11 +216,11 @@ Function Backup-GroupPolicy {
 # aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
 # CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
 # AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FOu4wqDvOwVz6ItNmhfvKLVBlN0GMA0GCSqGSIb3DQEBAQUABIIBAECuozUCXIua
-# 8XcAgyzK9b/SLJ37tehTdVmaPLa20SgrmlG9n5JSy05KwMw77gwzxiziX2iDK+Ue
-# dXSyA/MFfXsQsLzQ9ysi94aYXP8mJJ3+nB22BePYJ7YzaL6Iqf8WQjUC8LYhQq0k
-# OskmZchX3v50Rvy7HSVNnCQquoRUOndYcB3h89BfiR2hSBzTBXjDzSLibUvQ+Rtb
-# b2TE5rUzoUlyWy0PPUHzNXwLte1Isg2sVTEMJj1xanfwFm/ZOC+8QGuJV2JvtaBY
-# PCYxfYp8zwHUdNlfIvb//w8wB+eQBs/HFmOPEvl6+DXeaV1Cvb2scaYBX0TcmSCi
-# MwyDA1soHfg=
+# FFL57ga6zsjijEXWG6GVAeujy6aaMA0GCSqGSIb3DQEBAQUABIIBALyfOjTGAN9J
+# +t7LFfJZIMTMq5UtlgGdkbnBJdvW7yBFOd/+PS7pqhktmq+UXV6LmN0k+8lsaB1H
+# 7aon8z49JDGUHKx3AMM3vwofhgJuAhOEmqsUu8XwdFqY8UUMVyu5qwtyuV2bWHOQ
+# ONcXydm5f4f5nXXXsKVbKSQeq3PjSMMVwmsruePBaS4ZgoJGQcZNZBQbAE+8BCJE
+# MLqSP1YClg4qVU3TPJO5XyaJUBD4V/wB33c5Wn75mW26POIn8FhwhVKzRMa5LQCA
+# s4hTQd/3zEzb3otVo1ZZ0aFVjtOPxNRO/Qg6NRZnkORjfO06PBhCXX9ItyjoLchi
+# 5ELJwYEeLRk=
 # SIG # End signature block

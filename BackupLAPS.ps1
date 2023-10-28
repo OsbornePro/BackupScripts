@@ -1,117 +1,124 @@
-# DESCRIPTION: This script can be used to create a backup of the Local Administrator Password Solution (LAPS) passwords in Active Directory. This needs to run on a domain controller in order to work without modification
-#
-# PURPOSE: LAPS does not keep a history of previously set passwords. There may be situations that require a password from a 30+ days ago for a device. This creates a new CSV file for each month to provide you with that ability.
-#
-# SECURITY: At first glance you may believe this may not be a secure thing to do. However, this file is saved on a Domain Controller and requires SYSTEM or local Administrators group (Elevated Permissions) in order to read the file. If an attacker has admin access to a Domain Controller already they are already able to obtain this information on their own by querying Active Directory. To add or remove permissions for a group feel free to add the user or group at line 30.
+#Requires -Version 3.0
+#Requires -PSEdition Desktop
+#Requires -RunAsAdministrator
+<#
+.SYNOPSIS
+This script is used to keep a local admin password history for LAPS devices
 
 
-$FileName = (Get-Date).Ticks
-$FilePath = 'C:\DB\' + $FileName + '.csv'
-
-New-Item -Path $FilePath -ItemType File -Value "ComputerName,AdmPwd"
-$Computers = Get-ADComputer -Filter 'Enabled -eq "True"' -Properties "ms-Mcs-AdmPwd"
-
-Write-Output "[*] Updating computer and LAPS info"
-ForEach ($C in $Computers) {
-
-    $msMcsAdmPwd = $C.'ms-Mcs-AdmPwd'
-    If ($Null -ne $msMcsAdmPwd) {
-
-        $Name = $C.Name
-        $OutString = $Name + ',' + $msMcsAdmPwd
-
-        $OutString | Out-File -FilePath $FilePath -Append
-
-    }  # End If
-
-}  # End ForEach
+.DESCRIPTION
+This script can be used to create a backup of the Local Administrator Password Solution (LAPS) passwords in Active Directory. This needs to run on a domain controller in order to work without modification
 
 
-Write-Output "[*] Setting file permissions"
-$Acl = Get-Acl -Path $FilePath
-$Acl.SetAccessRuleProtection($True, $False)
+.PARAMETER OutFile
+Define the file path to save your backup password history too
 
-$PermittedUsers = @('NT AUTHORITY\SYSTEM', 'BUILTIN\Administrators')
-ForEach ($User in $PermittedUsers) {
 
-    $Permission = $User, 'FullControl', 'Allow'
-    $AccessRule = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $Permission
-    $Acl.AddAccessRule($AccessRule)
+.EXAMPLE
+PS> .\BackupLAPS.ps1 -OutFile "C:\ProgramData\LAPS\LAPS-Backups.csv"
+# This example backs up the LAPS passwords for all computer devices
 
-}  # End ForEach
 
-$Acl.SetOwner((New-Object -TypeName System.Security.Principal.NTAccount('BUILTIN\Administrators')))
-$Acl | Set-Acl -Path $FilePath
+.LINK
+https://www.microsoft.com/en-us/download/details.aspx?id=46899
+https://github.com/tobor88
+https://github.com/osbornepro
+https://www.powershellgallery.com/profiles/tobor
+https://osbornepro.com
+https://writeups.osbornepro.com
+https://encrypit.osbornepro.com
+https://btpssecpack.osbornepro.com
+https://www.powershellgallery.com/profiles/tobor
+https://www.hackthebox.eu/profile/52286
+https://www.linkedin.com/in/roberthosborne/
+https://www.credly.com/users/roberthosborne/badges
 
-# SIG # Begin signature block
-# MIIM9AYJKoZIhvcNAQcCoIIM5TCCDOECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
-# gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU2tVDwDyf29mtKvpQYBiAIeAL
-# +0ugggn7MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UE
-# BhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAY
-# BgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290
-# IENlcnRpZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMx
-# MDUwMzA3MDAwMFowgbQxCzAJBgNVBAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMw
-# EQYDVQQHEwpTY290dHNkYWxlMRowGAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjEt
-# MCsGA1UECxMkaHR0cDovL2NlcnRzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMTMw
-# MQYDVQQDEypHbyBEYWRkeSBTZWN1cmUgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IC0g
-# RzIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC54MsQ1K92vdSTYusw
-# ZLiBCGzDBNliF44v/z5lz4/OYuY8UhzaFkVLVat4a2ODYpDOD2lsmcgaFItMzEUz
-# 6ojcnqOvK/6AYZ15V8TPLvQ/MDxdR/yaFrzDN5ZBUY4RS1T4KL7QjL7wMDge87Am
-# +GZHY23ecSZHjzhHU9FGHbTj3ADqRay9vHHZqm8A29vNMDp5T19MR/gd71vCxJ1g
-# O7GyQ5HYpDNO6rPWJ0+tJYqlxvTV0KaudAVkV4i1RFXULSo6Pvi4vekyCgKUZMQW
-# OlDxSq7neTOvDCAHf+jfBDnCaQJsY1L6d8EbyHSHyLmTGFBUNUtpTrw700kuH9zB
-# 0lL7AgMBAAGjggEaMIIBFjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB
-# BjAdBgNVHQ4EFgQUQMK9J47MNIMwojPX+2yz8LQsgM4wHwYDVR0jBBgwFoAUOpqF
-# BxBnKLbv9r0FQW4gwZTaD94wNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhho
-# dHRwOi8vb2NzcC5nb2RhZGR5LmNvbS8wNQYDVR0fBC4wLDAqoCigJoYkaHR0cDov
-# L2NybC5nb2RhZGR5LmNvbS9nZHJvb3QtZzIuY3JsMEYGA1UdIAQ/MD0wOwYEVR0g
-# ADAzMDEGCCsGAQUFBwIBFiVodHRwczovL2NlcnRzLmdvZGFkZHkuY29tL3JlcG9z
-# aXRvcnkvMA0GCSqGSIb3DQEBCwUAA4IBAQAIfmyTEMg4uJapkEv/oV9PBO9sPpyI
-# BslQj6Zz91cxG7685C/b+LrTW+C05+Z5Yg4MotdqY3MxtfWoSKQ7CC2iXZDXtHwl
-# TxFWMMS2RJ17LJ3lXubvDGGqv+QqG+6EnriDfcFDzkSnE3ANkR/0yBOtg2DZ2HKo
-# cyQetawiDsoXiWJYRBuriSUBAA/NxBti21G00w9RKpv0vHP8ds42pM3Z2Czqrpv1
-# KrKQ0U11GIo/ikGQI31bS/6kA1ibRrLDYGCD+H1QQc7CoZDDu+8CL9IVVO5EFdkK
-# rqeKM+2xLXY2JtwE65/3YR8V3Idv7kaWKK2hJn0KCacuBKONvPi8BDABMIIFIzCC
-# BAugAwIBAgIIXIhNoAmmSAYwDQYJKoZIhvcNAQELBQAwgbQxCzAJBgNVBAYTAlVT
-# MRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQHEwpTY290dHNkYWxlMRowGAYDVQQK
-# ExFHb0RhZGR5LmNvbSwgSW5jLjEtMCsGA1UECxMkaHR0cDovL2NlcnRzLmdvZGFk
-# ZHkuY29tL3JlcG9zaXRvcnkvMTMwMQYDVQQDEypHbyBEYWRkeSBTZWN1cmUgQ2Vy
-# dGlmaWNhdGUgQXV0aG9yaXR5IC0gRzIwHhcNMjAxMTE1MjMyMDI5WhcNMjExMTA0
-# MTkzNjM2WjBlMQswCQYDVQQGEwJVUzERMA8GA1UECBMIQ29sb3JhZG8xGTAXBgNV
-# BAcTEENvbG9yYWRvIFNwcmluZ3MxEzARBgNVBAoTCk9zYm9ybmVQcm8xEzARBgNV
-# BAMTCk9zYm9ybmVQcm8wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDJ
-# V6Cvuf47D4iFITUSNj0ucZk+BfmrRG7XVOOiY9o7qJgaAN88SBSY45rpZtGnEVAY
-# Avj6coNuAqLa8k7+Im72TkMpoLAK0FZtrg6PTfJgi2pFWP+UrTaorLZnG3oIhzNG
-# Bt5oqBEy+BsVoUfA8/aFey3FedKuD1CeTKrghedqvGB+wGefMyT/+jaC99ezqGqs
-# SoXXCBeH6wJahstM5WAddUOylTkTEfyfsqWfMsgWbVn3VokIqpL6rE6YCtNROkZq
-# fCLZ7MJb5hQEl191qYc5VlMKuWlQWGrgVvEIE/8lgJAMwVPDwLNcFnB+zyKb+ULu
-# rWG3gGaKUk1Z5fK6YQ+BAgMBAAGjggGFMIIBgTAMBgNVHRMBAf8EAjAAMBMGA1Ud
-# JQQMMAoGCCsGAQUFBwMDMA4GA1UdDwEB/wQEAwIHgDA1BgNVHR8ELjAsMCqgKKAm
-# hiRodHRwOi8vY3JsLmdvZGFkZHkuY29tL2dkaWcyczUtNi5jcmwwXQYDVR0gBFYw
-# VDBIBgtghkgBhv1tAQcXAjA5MDcGCCsGAQUFBwIBFitodHRwOi8vY2VydGlmaWNh
-# dGVzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMAgGBmeBDAEEATB2BggrBgEFBQcB
-# AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmdvZGFkZHkuY29tLzBABggr
-# BgEFBQcwAoY0aHR0cDovL2NlcnRpZmljYXRlcy5nb2RhZGR5LmNvbS9yZXBvc2l0
-# b3J5L2dkaWcyLmNydDAfBgNVHSMEGDAWgBRAwr0njsw0gzCiM9f7bLPwtCyAzjAd
-# BgNVHQ4EFgQUkWYB7pDl3xX+PlMK1XO7rUHjbrwwDQYJKoZIhvcNAQELBQADggEB
-# AFSsN3fgaGGCi6m8GuaIrJayKZeEpeIK1VHJyoa33eFUY+0vHaASnH3J/jVHW4BF
-# U3bgFR/H/4B0XbYPlB1f4TYrYh0Ig9goYHK30LiWf+qXaX3WY9mOV3rM6Q/JfPpf
-# x55uU9T4yeY8g3KyA7Y7PmH+ZRgcQqDOZ5IAwKgknYoH25mCZwoZ7z/oJESAstPL
-# vImVrSkCPHKQxZy/tdM9liOYB5R2o/EgOD5OH3B/GzwmyFG3CqrqI2L4btQKKhm+
-# CPrue5oXv2theaUOd+IYJW9LA3gvP/zVQhlOQ/IbDRt7BibQp0uWjYaMAOaEKxZN
-# IksPKEJ8AxAHIvr+3P8R17UxggJjMIICXwIBATCBwTCBtDELMAkGA1UEBhMCVVMx
-# EDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoT
-# EUdvRGFkZHkuY29tLCBJbmMuMS0wKwYDVQQLEyRodHRwOi8vY2VydHMuZ29kYWRk
-# eS5jb20vcmVwb3NpdG9yeS8xMzAxBgNVBAMTKkdvIERhZGR5IFNlY3VyZSBDZXJ0
-# aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIXIhNoAmmSAYwCQYFKw4DAhoFAKB4MBgG
-# CisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcC
-# AQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkEMRYE
-# FCTa2KNYqA5/VTDsAPWSTKSZn7MLMA0GCSqGSIb3DQEBAQUABIIBAGHPYA9gsSud
-# 5+Pr7sC5cb+G1qxKj29CDgB+V0TA8n6uIOKPtTcllymckGemS76nD2yYoxDjUioD
-# 24RbY0dgdhhIfJBw5v+TPhzP9OnDgVtkaCiIfFS1hiXdAgGnp9esSIatfU0TCm5+
-# f71Tn5FU8eSOdAFNbSOZJhcNpr6gKuqvDE7tTJ45nDPGd9zMFvVRdHjiZKp9mhw5
-# b43lPrWUZ+NArd8GI3J54eQTJY3ZwbkyouBq3HTBu5lsI+lQq2nnijUeLB646sK9
-# VkUh19s3wydhF77C3esDziRdciSyBiAM2h3UQtOF8keFA6AfzKyLZfZ8f4xQIPCQ
-# 9f+DzpuCjAE=
-# SIG # End signature block
+
+.NOTES
+Last Modified: 10/28/2023
+Author: Robert H. Osborne (OsbornePro LLC.)
+Contact: contact@osbornepro.com
+
+At first glance you may believe this may not be a secure thing to do. 
+However, this file is saved on a Domain Controller and requires SYSTEM or local Administrators group (Elevated Permissions) in order to read the file. 
+If an attacker has admin access to a Domain Controller already they are already able to obtain this information on their own by querying Active Directory.
+
+
+.INPUTS
+None
+
+
+.OUTPUTS
+None
+#>
+[CmdletBinding()]
+    param(
+        [Parameter(
+            Mandatory=$False
+        )]  # End Parameter
+        [ValidateScript({$_ -like "*.csv"})]
+        [String]$OutFile = "C:\ProgramData\LAPS\$((Get-Date).Ticks).csv"
+    )  # End param
+
+    $TranscriptLogFile = "C:\Windows\Tasks\$(Get-Date -Format 'yyyy-MM-dd')_PSTranscript-LAPS-Backup.txt"
+    Try { Start-Transcript -Path $TranscriptLogFile -Append -Force -WhatIf:$False -Verbose:$False -ErrorAction Stop | Out-Null } Catch { Write-Verbose -Message "[v] Transcript for this session is already being kept" }
+    $Results = @()
+    Write-Verbose -Message "[v] Verifying the parent directory you specified exists for export"
+    New-Item -Path $OutFile -ItemType File -Force -ErrorAction Inquire -WhatIf:$False | Out-Null
+
+    Write-Debug -Message "[D] Building LDAP query information to obtain LAPS password history"
+    $Domain = (Get-CimInstance -ClassName Win32_ComputerSystem -Verbose:$False).Domain
+    $DomainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+    $PrimaryDC = ($DomainObj.PdcRoleOwner).Name
+    $SearchString =  "LDAP://$($PrimaryDC):389/"
+    $LdapFilter = '(objectCategory=computer)'
+    $DirectoryEntry = New-Object -TypeName System.DirectoryServices.DirectoryEntry
+    $Searcher = New-Object -TypeName System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+       
+    $DistinguishedName = "CN=$ComputerName,*,DC=$($DomainObj.Name.Replace('.',',DC='))"
+    $SearchString += $DistinguishedName
+
+    $Searcher.SearchRoot = $DirectoryEntry
+    $Searcher.Filter = $LdapFilter
+    $Searcher.SearchScope = "Subtree"
+    $Searcher.FindAll() | ForEach-Object {
+
+        Write-Information -MessageData "[i] Obtaining possible LAPS data for $($_.Properties.cn)"
+        $Results += New-Object -TypeName PSCustomObject -Property @{
+            HostName=$_.Properties.cn.Replace('{','').Replace('}','');
+            Username="Administrator";
+            Password=$(Try { $_.Properties.'ms-Mcs-AdmPwd'.Replace("{","").Replace("}","")} Catch { "LAPS Not Set" } );
+            Domain=$Domain
+        }  # End New-Object Property
+
+    }  # End ForEach-Object
+       
+    If ($Null -ne $Results) {
+
+        Write-Verbose -Message "[v] Updating devices and LAPS info"
+        $Results | Export-Csv -Path $OutFile -Delimiter "," -Encoding UTF8 -NoTypeInformation -Force -Verbose:$False -WhatIf:$False
+
+    } Else {
+
+        Write-Error -Message "[x] No LAPS password found for $ComputerName on $Server"
+
+    }  # End If Else
+
+
+    Write-Verbose -Message "[v] Setting secure file permissions"
+    $Acl = Get-Acl -Path $OutFile,$TranscriptLogFile -Verbose:$False
+    $Acl.SetAccessRuleProtection($True, $False)
+
+    $PermittedUsers = @('NT AUTHORITY\SYSTEM', 'BUILTIN\Administrators')
+    ForEach ($User in $PermittedUsers) {
+
+        $Permission = $User, 'FullControl', 'Allow'
+        $AccessRule = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $Permission
+        $Acl.AddAccessRule($AccessRule)
+
+    }  # End ForEach
+
+    $Acl.SetOwner((New-Object -TypeName System.Security.Principal.NTAccount('BUILTIN\Administrators')))
+    $Acl | Set-Acl -Path $OutFile,$TranscriptLogFile -Verbose:$False -WhatIf:$False
+
+    Try { Stop-Transcript -Verbose:$False -ErrorAction Stop | Out-Null } Catch { Write-Warning -Message "[!] No transcript was kept for this session" }
